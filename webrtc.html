@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WebRTC Call - Call Me</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
 </head>
 <body>
   <header class="header">
@@ -16,10 +17,14 @@
     <video id="localVideo" autoplay muted playsinline></video>
     <video id="remoteVideo" autoplay playsinline></video>
 
-    <div class="btn-group">
-      <button onclick="startCall()">📞 Start Call</button>
-      <button onclick="endCall()">❌ End Call</button>
+    <div class="id-section">
+      <input type="text" id="peerId" placeholder="Enter ID to call">
+      <button onclick="makeCall()">📞 Call</button>
+      <button onclick="endCall()">❌ End</button>
     </div>
+
+    <p>Your ID: <span id="myId">Generating...</span></p>
+
     <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
   </main>
 
