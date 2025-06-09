@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebRTC Call - Call Me</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>📡 WebRTC Call (Test)</h1>
+    <p>Peer-to-peer test call via browser</p>
+  </header>
+
+  <main class="webrtc-page">
+    <video id="localVideo" autoplay muted playsinline></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+
+    <div class="btn-group">
+      <button onclick="startCall()">📞 Start Call</button>
+      <button onclick="endCall()">❌ End Call</button>
+    </div>
+    <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
+  </main>
+
+  <script src="js/webrtc.js"></script>
+</body>
+</html>
