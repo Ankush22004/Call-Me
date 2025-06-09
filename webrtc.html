@@ -18,7 +18,9 @@
     <video id="remoteVideo" autoplay playsinline></video>
 
     <div class="id-section">
-      <p>Your ID: <span id="myId">Generating...</span> <button onclick="copyMyId()">📋 Copy</button></p>
+      <p>Your ID: <span id="myId">Generating...</span>
+        <button onclick="copyMyId()">📋 Copy</button>
+      </p>
     </div>
 
     <div class="call-section">
@@ -27,8 +29,8 @@
       <button onclick="endCall()">❌ End</button>
     </div>
 
-    <div id="status">Status: Not Connected</div>
-    <div id="incoming" style="display:none;">Incoming Call from <span id="callerId"></span></div>
+    <div id="status" style="margin-top: 10px;">Status: Not Connected</div>
+    <div id="incoming" style="display:none;">📥 Incoming Call from <span id="callerId"></span></div>
 
     <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
   </main>
