@@ -6,11 +6,21 @@
 </head>
 <body>
   <h1>📑 Call History</h1>
-  <ul>
-    <li>📞 Aman Sharma – Missed – 2:45 PM</li>
-    <li>📞 Riya Verma – Incoming – 11:00 AM</li>
-    <li>📞 Mohit Singh – Outgoing – Yesterday</li>
-    <li>📞 Neha Kapoor – Missed – 2 days ago</li>
-  </ul>
+<ul id="logsList"></ul>
+
+<script>
+  const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
+  const list = document.getElementById("logsList");
+
+  if (logs.length === 0) {
+    list.innerHTML = "<li>No call logs yet</li>";
+  } else {
+    logs.forEach(entry => {
+      const li = document.createElement("li");
+      li.textContent = entry;
+      list.appendChild(li);
+    });
+  }
+</script>
 </body>
 </html>
