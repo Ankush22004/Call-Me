@@ -1,73 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-   <meta charset="UTF-8">
-  <meta name="viewport" content="width=
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard - Call Me</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    /* Dashboard Styling */
-.header {
-  text-align: center;
-  padding: 20px;
-  background-color: #1a237e;
-  color: white;
-}
-
-.dashboard {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  padding: 30px;
-}
-
-.card {
-  background: #f0f0f0;
-  border-radius: 10px;
-  text-align: center;
-  padding: 30px 20px;
-  width: 120px;
-  margin: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  font-size: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.card:hover {
-  background: #dfe6fd;
-  transform: scale(1.05);
-}
-
-.footer {
-  text-align: center;
-  padding: 15px;
-  background-color: #eee;
-  margin-top: 40px;
-  color: #555;
-}
-  </style>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header class="header">
-    <h1>📊 Dashboard</h1>
-    <p>Choose an action below</p>
+    <h1>📱 BharatVerse Dashboard</h1>
+    <p>Welcome to your smart call manager</p>
   </header>
 
   <main class="dashboard">
-    <div class="card" onclick="location.href='call.html'">
-      📞<br><strong>Call</strong>
-    </div>
-    <div class="card" onclick="location.href='contacts.html'">
-      📇<br><strong>Contacts</strong>
-    </div>
-    <div class="card" onclick="location.href='logs.html'">
-      📜<br><strong>Call Logs</strong>
+    <div class="card-grid">
+      <a href="call.html" class="card">
+        <span>📞</span>
+        <h3>Make Call</h3>
+      </a>
+      <a href="contacts.html" class="card">
+        <span>👥</span>
+        <h3>Contacts</h3>
+      </a>
+      <a href="logs.html" class="card">
+        <span>📜</span>
+        <h3>Call Logs</h3>
+      </a>
+      <a href="index.html" class="card danger">
+        <span>🚪</span>
+        <h3>Logout</h3>
+      </a>
     </div>
   </main>
-
-  <footer class="footer">
-    <p>&copy; 2025 BharatVerse</p>
-  </footer>
 </body>
 </html>
