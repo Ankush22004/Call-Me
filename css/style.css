@@ -1,0 +1,27 @@
+body {
+  font-family: sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+h1 {
+  margin-top: 30px;
+  color: #1a237e;
+}
+.btn {
+  display: inline-block;
+  margin: 15px;
+  padding: 15px 30px;
+  font-size: 18px;
+  text-decoration: none;
+  color: white;
+  background-color: #1a237e;
+  border-radius: 8px;
+}
+.btn:hover {
+  background-color: #3949ab;
+}
+.nav-buttons {
+  margin-top: 50px;
+}
