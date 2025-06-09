@@ -13,13 +13,25 @@
   </div>
 
   <script>
-    function makeCall() {
-      const number = document.getElementById("dialInput").value;
-      alert("Calling: " + number);
+  function makeCall() {
+    const number = document.getElementById("dialInput").value;
+    if (!number) {
+      alert("Enter a number!");
+      return;
     }
-    function endCall() {
-      alert("Call ended");
-    }
-  </script>
+
+    // Save to localStorage log
+    const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
+    logs.unshift(`📞 ${number} – Outgoing – ${new Date().toLocaleTimeString()}`);
+    localStorage.setItem("callLogs", JSON.stringify(logs));
+
+    alert("Calling: " + number);
+  }
+
+  function endCall() {
+    alert("Call ended");
+  }
+</script>
+  
 </body>
 </html>
