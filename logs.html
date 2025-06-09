@@ -3,24 +3,53 @@
 <head>
   <title>Call Logs</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #e3f2fd;
+      margin: 8px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    button {
+      background: red;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>📑 Call History</h1>
-<ul id="logsList"></ul>
+  <h1>📜 Call Logs</h1>
 
-<script>
-  const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
-  const list = document.getElementById("logsList");
+  <ul id="logsList"></ul>
 
-  if (logs.length === 0) {
-    list.innerHTML = "<li>No call logs yet</li>";
-  } else {
-    logs.forEach(entry => {
-      const li = document.createElement("li");
-      li.textContent = entry;
-      list.appendChild(li);
-    });
-  }
-</script>
+  <button onclick="clearLogs()">🧹 Clear Logs</button>
+
+  <script>
+    const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
+    const list = document.getElementById("logsList");
+
+    if (logs.length === 0) {
+      list.innerHTML = "<li>No call logs yet</li>";
+    } else {
+      logs.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = entry;
+        list.appendChild(li);
+      });
+    }
+
+    function clearLogs() {
+      localStorage.removeItem("callLogs");
+      list.innerHTML = "<li>Logs cleared.</li>";
+    }
+  </script>
 </body>
 </html>
