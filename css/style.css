@@ -258,3 +258,38 @@ ul li {
 }
 
 
+
+.webrtc-page {
+  text-align: center;
+  padding: 20px;
+}
+
+video {
+  width: 90%;
+  max-width: 320px;
+  margin: 10px;
+  border: 2px solid #1a237e;
+  border-radius: 10px;
+}
+
+.btn-group {
+  margin: 20px;
+}
+
+.btn-group button {
+  background: #1a237e;
+  color: #fff;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 6px;
+  margin: 0 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-group button:hover {
+  background: #3949ab;
+}
+
+
+
