@@ -20,32 +20,32 @@
     }
   </script>
 
-<script>
-  let deferredPrompt;
+  <script>
+    let deferredPrompt;
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
 
-    const installBtn = document.createElement('button');
-    installBtn.textContent = "📥 Install App";
-    installBtn.style = "position:fixed; bottom:20px; right:20px; background:#1a237e; color:white; border:none; padding:12px 16px; border-radius:5px; cursor:pointer; z-index:1000;";
-    document.body.appendChild(installBtn);
+      const installBtn = document.createElement('button');
+      installBtn.textContent = "📥 Install App";
+      installBtn.style = "position:fixed; bottom:20px; right:20px; background:#1a237e; color:white; border:none; padding:12px 16px; border-radius:5px; cursor:pointer; z-index:1000;";
+      document.body.appendChild(installBtn);
 
-    installBtn.addEventListener('click', () => {
-      installBtn.style.display = 'none';
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(choiceResult => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted install');
-        } else {
-          console.log('User dismissed install');
-        }
-        deferredPrompt = null;
+      installBtn.addEventListener('click', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted install');
+          } else {
+            console.log('User dismissed install');
+          }
+          deferredPrompt = null;
+        });
       });
     });
-  });
-</script>
+  </script>
 
 </body>
 </html>
