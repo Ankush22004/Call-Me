@@ -5,7 +5,29 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>👥 Contacts</h1>
-  <p>Coming soon: Contact search, fetch & actions</p>
+  <h1>👥 Your Contacts</h1>
+  <input type="text" id="searchBox" placeholder="Search contacts..." oninput="filterContacts()">
+  
+  <ul id="contactList">
+    <li><span>Aman Sharma</span> <button onclick="call('Aman Sharma')">📞</button></li>
+    <li><span>Riya Verma</span> <button onclick="call('Riya Verma')">📞</button></li>
+    <li><span>Mohit Singh</span> <button onclick="call('Mohit Singh')">📞</button></li>
+    <li><span>Neha Kapoor</span> <button onclick="call('Neha Kapoor')">📞</button></li>
+  </ul>
+
+  <script>
+    function call(name) {
+      alert("Calling " + name);
+    }
+
+    function filterContacts() {
+      const query = document.getElementById("searchBox").value.toLowerCase();
+      const contacts = document.querySelectorAll("#contactList li");
+      contacts.forEach(item => {
+        const name = item.textContent.toLowerCase();
+        item.style.display = name.includes(query) ? "" : "none";
+      });
+    }
+  </script>
 </body>
 </html>
