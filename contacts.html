@@ -14,20 +14,23 @@
     <li><span>Mohit Singh</span> <button onclick="call('Mohit Singh')">📞</button></li>
     <li><span>Neha Kapoor</span> <button onclick="call('Neha Kapoor')">📞</button></li>
   </ul>
+  
+<script>
+  function call(name) {
+    const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
+    logs.unshift(`📞 ${name} – Outgoing – ${new Date().toLocaleTimeString()}`);
+    localStorage.setItem("callLogs", JSON.stringify(logs));
+    alert("Calling " + name);
+  }
 
-  <script>
-    function call(name) {
-      alert("Calling " + name);
-    }
-
-    function filterContacts() {
-      const query = document.getElementById("searchBox").value.toLowerCase();
-      const contacts = document.querySelectorAll("#contactList li");
-      contacts.forEach(item => {
-        const name = item.textContent.toLowerCase();
-        item.style.display = name.includes(query) ? "" : "none";
-      });
-    }
-  </script>
+  function filterContacts() {
+    const query = document.getElementById("searchBox").value.toLowerCase();
+    const contacts = document.querySelectorAll("#contactList li");
+    contacts.forEach(item => {
+      const name = item.textContent.toLowerCase();
+      item.style.display = name.includes(query) ? "" : "none";
+    });
+  }
+</script>
 </body>
 </html>
