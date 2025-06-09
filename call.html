@@ -1,48 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Make a Call</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Call - Call Me</title>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    #jitsiFrame {
-      width: 100%;
-      height: 500px;
-      border: none;
-      display: none;
-      margin-top: 20px;
-    }
-  </style>
 </head>
 <body>
-  <h1>📞 Video/Voice Call</h1>
-  <input type="text" id="dialInput" placeholder="Enter name or number" maxlength="20">
-  <div class="dial-buttons">
-    <button onclick="makeCall()">📲 Start Call</button>
-    <button onclick="endCall()">❌ End</button>
-  </div>
+  <header class="header">
+    <h1>📞 Call</h1>
+    <p>Dial a number</p>
+  </header>
 
-  <iframe id="jitsiFrame"></iframe>
+  <main class="call-page">
+    <input type="text" id="phoneNumber" placeholder="Enter number" readonly />
+
+    <div class="dial-pad">
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button>*</button>
+      <button>0</button>
+      <button>#</button>
+    </div>
+
+    <button class="call-btn">📞 Call</button>
+    <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
+  </main>
 
   <script>
-    let roomId = "";
-    function makeCall() {
-      const input = document.getElementById("dialInput").value || "guest";
-      roomId = "BharatVerse_" + input.replace(/\s+/g, "_") + "_" + Math.floor(Math.random() * 1000);
-      const iframe = document.getElementById("jitsiFrame");
-      iframe.src = `https://meet.jit.si/${roomId}`;
-      iframe.style.display = "block";
+    const phoneInput = document.getElementById('phoneNumber');
+    const dialButtons = document.querySelectorAll('.dial-pad button');
+    const callButton = document.querySelector('.call-btn');
 
-      // Log the call
-      const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
-      logs.unshift(`📞 ${input} – Video Call – ${new Date().toLocaleTimeString()}`);
-      localStorage.setItem("callLogs", JSON.stringify(logs));
-    }
+    dialButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        phoneInput.value += button.textContent;
+      });
+    });
 
-    function endCall() {
-      const iframe = document.getElementById("jitsiFrame");
-      iframe.src = "";
-      iframe.style.display = "none";
-    }
+    callButton.addEventListener('click', () => {
+      const number = phoneInput.value;
+      if (number) {
+        window.location.href = `tel:${number}`; // This opens phone dialer on mobile
+      } else {
+        alert("Please enter a number.");
+      }
+    });
   </script>
 </body>
 </html>
