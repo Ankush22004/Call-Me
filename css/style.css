@@ -25,3 +25,34 @@ h1 {
 .nav-buttons {
   margin-top: 50px;
 }
+input[type="tel"], input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  margin: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 400px;
+}
+
+ul li {
+  background: #fff;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+}
+
+.dial-buttons button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
