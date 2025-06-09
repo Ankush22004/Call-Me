@@ -3,34 +3,109 @@
 <head>
   <title>Contacts</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .contact {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin: 10px auto;
+      padding: 10px;
+      background: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .contact-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #2196f3;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+    }
+
+    .call-btn {
+      background: green;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #search {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      margin: 10px auto;
+      display: block;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-  <h1>👥 Your Contacts</h1>
-  <input type="text" id="searchBox" placeholder="Search contacts..." oninput="filterContacts()">
-  
-  <ul id="contactList">
-    <li><span>Aman Sharma</span> <button onclick="call('Aman Sharma')">📞</button></li>
-    <li><span>Riya Verma</span> <button onclick="call('Riya Verma')">📞</button></li>
-    <li><span>Mohit Singh</span> <button onclick="call('Mohit Singh')">📞</button></li>
-    <li><span>Neha Kapoor</span> <button onclick="call('Neha Kapoor')">📞</button></li>
-  </ul>
-  
-<script>
-  function call(name) {
-    const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
-    logs.unshift(`📞 ${name} – Outgoing – ${new Date().toLocaleTimeString()}`);
-    localStorage.setItem("callLogs", JSON.stringify(logs));
-    alert("Calling " + name);
-  }
+  <h1>📇 Contacts</h1>
 
-  function filterContacts() {
-    const query = document.getElementById("searchBox").value.toLowerCase();
-    const contacts = document.querySelectorAll("#contactList li");
-    contacts.forEach(item => {
-      const name = item.textContent.toLowerCase();
-      item.style.display = name.includes(query) ? "" : "none";
-    });
-  }
-</script>
+  <input type="text" id="search" placeholder="🔍 Search contacts..." onkeyup="filterContacts()">
+
+  <div id="contactList">
+    <!-- Sample static contacts -->
+    <div class="contact">
+      <div class="contact-info">
+        <div class="avatar">R</div>
+        <div>
+          <strong>Ravi Kumar</strong><br>
+          <small>9876543210</small>
+        </div>
+      </div>
+      <button class="call-btn" onclick="dialNumber('9876543210')">📞 Call</button>
+    </div>
+
+    <div class="contact">
+      <div class="contact-info">
+        <div class="avatar">A</div>
+        <div>
+          <strong>Anjali Sharma</strong><br>
+          <small>9123456780</small>
+        </div>
+      </div>
+      <button class="call-btn" onclick="dialNumber('9123456780')">📞 Call</button>
+    </div>
+  </div>
+
+  <script>
+    function filterContacts() {
+      const input = document.getElementById("search").value.toLowerCase();
+      const contacts = document.querySelectorAll(".contact");
+
+      contacts.forEach(contact => {
+        const name = contact.textContent.toLowerCase();
+        contact.style.display = name.includes(input) ? "flex" : "none";
+      });
+    }
+
+    function dialNumber(number) {
+      // Save to logs
+      const logs = JSON.parse(localStorage.getItem("callLogs")) || [];
+      logs.unshift(`📞 ${number} – Contact Call – ${new Date().toLocaleTimeString()}`);
+      localStorage.setItem("callLogs", JSON.stringify(logs));
+
+      // Redirect to dial page with number (optional)
+      alert("Dialing: " + number);
+      // location.href = "call.html?number=" + number;
+    }
+  </script>
 </body>
 </html>
