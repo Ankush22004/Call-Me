@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Make a Call</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>📞 Dial a Number</h1>
+  <input type="tel" id="dialInput" placeholder="Enter number" maxlength="15">
+  <div class="dial-buttons">
+    <button onclick="makeCall()">📲 Call</button>
+    <button onclick="endCall()">❌ End</button>
+  </div>
+
+  <script>
+    function makeCall() {
+      const number = document.getElementById("dialInput").value;
+      alert("Calling: " + number);
+    }
+    function endCall() {
+      alert("Call ended");
+    }
+  </script>
+</body>
+</html>
