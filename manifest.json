@@ -1,10 +1,10 @@
 {
-  "name": "BharatVerse",
-  "short_name": "BharatVerse",
+  "name": "Call Me - BharatVerse",
+  "short_name": "CallMe",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#1e3a8a",
+  "theme_color": "#1a237e",
   "icons": [
     {
       "src": "icons/icon-192.png",
