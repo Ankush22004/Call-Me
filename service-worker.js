@@ -1,6 +1,6 @@
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open("bharatverse-cache").then(cache => {
+    caches.open("call-me-cache").then(cache => {
       return cache.addAll([
         "index.html",
         "dashboard.html",
