@@ -1,19 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard - Call Me</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 10px auto;
+      text-align: center;
+      border-radius: 10px;
+      background: #f0f4ff;
+      width: 80%;
+    }
+    .card a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #1a237e;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-  <main class="dashboard">
-    <h1>📋 Dashboard</h1>
-    <div class="nav-buttons">
-      <a href="call.html" class="btn">📞 Make a Call</a>
-      <a href="contacts.html" class="btn">👥 Contacts</a>
-      <a href="logs.html" class="btn">📑 Call Logs</a>
-    </div>
-  </main>
+  <h1>📊 Dashboard</h1>
+
+  <div class="card"><a href="contacts.html">📇 Contacts</a></div>
+  <div class="card"><a href="call.html">📞 Dial Pad</a></div>
+  <div class="card"><a href="logs.html">🕓 Call Logs</a></div>
+
 </body>
 </html>
