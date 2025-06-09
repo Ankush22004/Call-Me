@@ -22,10 +22,15 @@
       <button onclick="makeCall()">📞 Call</button>
       <button onclick="endCall()">❌ End</button>
     </div>
+   
+    <div class="id-display">
+  <p>Your ID: <span id="myId">Generating...</span>
+    <button onclick="copyMyId()">📋 Copy</button>
+  </p>
+</div>
 
-    <p>Your ID: <span id="myId">Generating...</span></p>
-     <button id="copyIdBtn">📋 Copy My ID</button>
-    
+<div id="callStatus" class="status">Status: Not connected</div>
+<ul id="callLogs" class="logs"></ul>
     <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
   </main>
 
