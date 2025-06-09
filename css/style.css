@@ -110,3 +110,44 @@ ul li {
   text-decoration: none;
   font-size: 16px;
 }
+.contacts-page {
+  padding: 20px;
+  text-align: center;
+}
+
+#searchBar {
+  padding: 10px;
+  width: 80%;
+  max-width: 300px;
+  margin: 10px auto 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: block;
+}
+
+#contactsList {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 320px;
+}
+
+#contactsList li {
+  margin: 10px 0;
+}
+
+#contactsList a {
+  text-decoration: none;
+  color: #1a237e;
+  font-size: 18px;
+  display: block;
+  padding: 10px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+#contactsList a:hover {
+  background: #dfe6fd;
+}
