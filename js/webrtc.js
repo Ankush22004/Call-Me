@@ -128,3 +128,4 @@ function logCall(peerId, type) {
   const timestamp = new Date().toLocaleTimeString();
   console.log(`[${type} Call] with ${peerId} at ${timestamp}`);
 }
+<script src="js/webrtc-advanced.js"></script>
