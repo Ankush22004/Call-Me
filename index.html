@@ -14,12 +14,14 @@
     <a href="dashboard.html" class="btn">Go to Dashboard</a>
   </main>
 
+  <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
   </script>
 
+  <!-- Install App (PWA Prompt) -->
   <script>
     let deferredPrompt;
 
@@ -46,6 +48,5 @@
       });
     });
   </script>
-
 </body>
 </html>
