@@ -1,36 +1,59 @@
+// js/webrtc.js
+
 let localStream;
-let peerConnection;
-const servers = {
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-};
+let peer;
+let currentCall;
 
-const localVideo = document.getElementById("localVideo");
-const remoteVideo = document.getElementById("remoteVideo");
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
 
-async function startCall() {
-  localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-  localVideo.srcObject = localStream;
+// Step 1: Get User Media
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+  .then(stream => {
+    localStream = stream;
+    localVideo.srcObject = stream;
 
-  peerConnection = new RTCPeerConnection(servers);
+    // Step 2: Create Peer
+    peer = new Peer(); // Random ID
 
-  localStream.getTracks().forEach(track => {
-    peerConnection.addTrack(track, localStream);
+    peer.on('open', id => {
+      alert(`🆔 Your ID: ${id}\nSend this ID to your friend to receive the call.`);
+    });
+
+    // Step 3: Answer Incoming Calls
+    peer.on('call', call => {
+      call.answer(localStream);
+      currentCall = call;
+
+      call.on('stream', remoteStream => {
+        remoteVideo.srcObject = remoteStream;
+      });
+    });
+  })
+  .catch(error => {
+    console.error('Media Error:', error);
+    alert('Failed to access camera/microphone.');
   });
 
-  peerConnection.ontrack = event => {
-    remoteVideo.srcObject = event.streams[0];
-  };
+// Start Call (manual prompt)
+function startCall() {
+  const remoteId = prompt("Enter the ID of the person you want to call:");
+  if (!remoteId || !peer || !localStream) return;
 
-  // No signaling implemented yet!
-  alert("WebRTC base setup ready! Signaling needed to connect two users.");
+  const call = peer.call(remoteId, localStream);
+  currentCall = call;
+
+  call.on('stream', remoteStream => {
+    remoteVideo.srcObject = remoteStream;
+  });
 }
 
+// End Call
 function endCall() {
-  if (peerConnection) {
-    peerConnection.close();
-    peerConnection = null;
+  if (currentCall) {
+    currentCall.close();
+    currentCall = null;
+    remoteVideo.srcObject = null;
+    alert('Call ended');
   }
-  localVideo.srcObject.getTracks().forEach(track => track.stop());
-  localVideo.srcObject = null;
-  remoteVideo.srcObject = null;
 }
