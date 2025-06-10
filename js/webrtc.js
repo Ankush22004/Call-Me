@@ -21,24 +21,28 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     });
 
     peer.on('call', call => {
-      playRingtone();
-      callerIdSpan.textContent = call.peer;
-      incomingDiv.style.display = 'block';
-      updateStatus(`Incoming call from ${call.peer}`, 'yellow');
+  playRingtone(); // ⏰ Start ringing
+  callerIdSpan.textContent = call.peer;
+  incomingDiv.style.display = 'block';
+  updateStatus(`Incoming call from ${call.peer}`, 'yellow');
 
-      const accept = confirm(`Incoming call from ${call.peer}. Accept?`);
-      if (accept) {
-        stopRingtone();
-        call.answer(localStream);
-        currentCall = call;
-        handleCall(call);
-      } else {
-        stopRingtone();
-        call.close();
-        updateStatus('Call Rejected', 'red');
-      }
-    });
-  })
+  // Modern popup
+  showIncomingPopup(call.peer,
+    () => {
+      // On Accept
+      stopRingtone(); // 🔕 Stop ringing
+      call.answer(localStream);
+      currentCall = call;
+      handleCall(call);
+    },
+    () => {
+      // On Reject
+      stopRingtone(); // 🔕 Stop ringing
+      call.close();
+      updateStatus('Call Rejected', 'red');
+    }
+  );
+});
   .catch(err => {
     alert('⚠️ Error accessing camera/microphone.');
     console.error(err);
