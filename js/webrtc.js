@@ -21,23 +21,23 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     });
 
     peer.on('call', call => {
-  playRingtone(); // ⏰ Start ringing
+  playRingtone(); // ⏰ Start ringtone
   callerIdSpan.textContent = call.peer;
   incomingDiv.style.display = 'block';
   updateStatus(`Incoming call from ${call.peer}`, 'yellow');
 
-  // Modern popup
+  // ✅ Show modern popup UI
   showIncomingPopup(call.peer,
     () => {
-      // On Accept
-      stopRingtone(); // 🔕 Stop ringing
+      // 🔔 Accept callback
+      stopRingtone();
       call.answer(localStream);
       currentCall = call;
       handleCall(call);
     },
     () => {
-      // On Reject
-      stopRingtone(); // 🔕 Stop ringing
+      // ❌ Reject callback
+      stopRingtone();
       call.close();
       updateStatus('Call Rejected', 'red');
     }
