@@ -48,11 +48,16 @@ if (!HTMLMediaElement.prototype.setSinkId) {
     .catch(err => console.error("Speaker change error:", err));
 };
 
-// Ringtone controls
+// Inside webrtc-advanced.js
+
+const ringtone = new Audio("assets/ringtone.mp3");
+ringtone.loop = true;
+
 function playRingtone() {
-  ringtone.play().catch(err => console.warn("Ringtone play blocked:", err));
+    ringtone.play().catch((err) => console.log("Ringtone error: ", err));
 }
+
 function stopRingtone() {
-  ringtone.pause();
-  ringtone.currentTime = 0;
+    ringtone.pause();
+    ringtone.currentTime = 0;
 }
