@@ -2,6 +2,10 @@
 const muteBtn = document.createElement('button');
 const videoBtn = document.createElement('button');
 const speakerBtn = document.createElement('button');
+const incomingDiv = document.getElementById("incoming-popup");
+const callerIdSpan = document.getElementById("caller-id");
+const acceptBtn = document.getElementById("accept-btn");
+const rejectBtn = document.getElementById("reject-btn")
 
 let isMuted = false;
 let isVideoOn = true;
@@ -103,6 +107,22 @@ logs.reverse().forEach(log => {
     logList.appendChild(li);
 });
 </script>
+
+//Function to handle the popup and buttons
+function showIncomingPopup(peerId, onAccept, onReject) {
+    callerIdSpan.textContent = peerId;
+    incomingDiv.style.display = 'flex'; // show popup (set display: none by default in CSS)
+
+    acceptBtn.onclick = () => {
+        incomingDiv.style.display = 'none';
+        onAccept();
+    };
+
+    rejectBtn.onclick = () => {
+        incomingDiv.style.display = 'none';
+        onReject();
+    };
+}
 
 
 
