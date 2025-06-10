@@ -61,3 +61,12 @@ function stopRingtone() {
     ringtone.pause();
     ringtone.currentTime = 0;
 }
+function logCall(type, peerId) {
+    const logs = JSON.parse(localStorage.getItem("callLogs") || "[]");
+    logs.push({
+        type: type, // 'incoming', 'missed', 'outgoing'
+        peerId: peerId,
+        time: new Date().toLocaleString()
+    });
+    localStorage.setItem("callLogs", JSON.stringify(logs));
+}
