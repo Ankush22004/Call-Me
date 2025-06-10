@@ -8,7 +8,7 @@ const statusDiv = document.getElementById('status');
 const incomingDiv = document.getElementById('incoming');
 const callerIdSpan = document.getElementById('callerId');
 
-// Media permission + Peer connection
+// Access media devices
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
   .then(stream => {
     localStream = stream;
@@ -20,35 +20,36 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       myIdSpan.textContent = id;
     });
 
+    // Incoming call handler (modern UI)
     peer.on('call', call => {
-  playRingtone(); // ⏰ Start ringtone
-  callerIdSpan.textContent = call.peer;
-  incomingDiv.style.display = 'block';
-  updateStatus(`Incoming call from ${call.peer}`, 'yellow');
+      playRingtone(); // ⏰ Start ringtone
+      callerIdSpan.textContent = call.peer;
+      incomingDiv.style.display = 'block';
+      updateStatus(`Incoming call from ${call.peer}`, 'yellow');
 
-  // ✅ Show modern popup UI
-  showIncomingPopup(call.peer,
-    () => {
-      // 🔔 Accept callback
-      stopRingtone();
-      call.answer(localStream);
-      currentCall = call;
-      handleCall(call);
-    },
-    () => {
-      // ❌ Reject callback
-      stopRingtone();
-      call.close();
-      updateStatus('Call Rejected', 'red');
-    }
-  );
-});
+      // Modern popup
+      showIncomingPopup(call.peer,
+        () => {
+          stopRingtone(); // ✅ Accept
+          call.answer(localStream);
+          currentCall = call;
+          handleCall(call);
+        },
+        () => {
+          stopRingtone(); // ❌ Reject
+          call.close();
+          updateStatus('Call Rejected', 'red');
+        }
+      );
+    });
+  })
   .catch(err => {
     alert('⚠️ Error accessing camera/microphone.');
     console.error(err);
   });
 
-// Handle call stream
+
+// Handle the stream during the call
 function handleCall(call) {
   call.on('stream', remoteStream => {
     remoteVideo.srcObject = remoteStream;
@@ -63,7 +64,7 @@ function handleCall(call) {
   });
 }
 
-// Start a call
+// Make a call
 function makeCall() {
   const peerId = peerIdInput.value.trim();
   if (!peerId) return alert('Enter peer ID.');
@@ -84,9 +85,12 @@ function makeCall() {
   });
 }
 
-// End call
+// End the call
 function endCall() {
-  if (currentCall) currentCall.close();
+  if (currentCall) {
+    currentCall.close();
+    currentCall = null;
+  }
   remoteVideo.srcObject = null;
   updateStatus('Call Ended', 'red');
   stopCallTimer();
