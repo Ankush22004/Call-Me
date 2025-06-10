@@ -7,6 +7,8 @@ const peerIdInput = document.getElementById('peerIdInput');
 const statusDiv = document.getElementById('status');
 const incomingDiv = document.getElementById('incoming');
 const callerIdSpan = document.getElementById('callerId');
+const acceptBtn = document.getElementById("accept-btn");
+const rejectBtn = document.getElementById("reject-btn")
 
 // Access media devices
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -22,27 +24,23 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 
     // Incoming call handler (modern UI)
     peer.on('call', call => {
-      playRingtone(); // ⏰ Start ringtone
-      callerIdSpan.textContent = call.peer;
-      incomingDiv.style.display = 'block';
-      updateStatus(`Incoming call from ${call.peer}`, 'yellow');
+    playRingtone(); // ⏰ Start ringtone
+    updateStatus(`📞 Incoming call from ${call.peer}`, 'yellow');
 
-      // Modern popup
-      showIncomingPopup(call.peer,
+    showIncomingPopup(call.peer,
         () => {
-          stopRingtone(); // ✅ Accept
-          call.answer(localStream);
-          currentCall = call;
-          handleCall(call);
+            stopRingtone(); // ✅ Stop ringtone on accept
+            call.answer(localStream); // localStream must be initialized
+            currentCall = call;
+            handleCall(call); // existing function to manage stream
         },
         () => {
-          stopRingtone(); // ❌ Reject
-          call.close();
-          updateStatus('Call Rejected', 'red');
+            stopRingtone(); // ❌ Stop ringtone on reject
+            call.close();
+            updateStatus('❌ Call Rejected', 'red');
         }
-      );
-    });
-  })
+    );
+});
   .catch(err => {
     alert('⚠️ Error accessing camera/microphone.');
     console.error(err);
