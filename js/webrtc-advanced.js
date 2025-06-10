@@ -39,7 +39,9 @@ speakerBtn.onclick = () => {
     alert("🔇 Speaker switching not supported in this browser.");
     return;
   }
-
+if (!HTMLMediaElement.prototype.setSinkId) {
+  speakerBtn.style.display = "none"; // Hide button if unsupported
+}
   const deviceId = prompt("🎧 Enter audio output device ID (or use default):", "default");
   remoteVideo.setSinkId(deviceId)
     .then(() => alert("✅ Speaker changed!"))
