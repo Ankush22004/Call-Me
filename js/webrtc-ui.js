@@ -1,64 +1,59 @@
-// Create popup elements
-const incomingPopup = document.createElement('div');
-incomingPopup.id = 'incomingPopup';
-incomingPopup.innerHTML = `
-  <div class="popup-card">
+// Create Popup Elements
+const popup = document.createElement('div');
+popup.id = 'incomingPopup';
+popup.innerHTML = `
+  <div class="popup-content">
     <h3>📥 Incoming Call</h3>
-    <p>From: <span id="popupCallerId"></span></p>
+    <p id="popupCallerId">Caller ID: </p>
     <div class="popup-buttons">
-      <button id="acceptCall">✅ Accept</button>
-      <button id="rejectCall">❌ Reject</button>
+      <button id="acceptBtn">✅ Accept</button>
+      <button id="rejectBtn">❌ Reject</button>
     </div>
   </div>
 `;
-document.body.appendChild(incomingPopup);
+document.body.appendChild(popup);
 
-// Style the popup via JS (or move this to CSS later)
-const popupStyle = document.createElement('style');
-popupStyle.textContent = `
-  #incomingPopup {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #fff;
-    border: 2px solid #4CAF50;
-    padding: 20px;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    border-radius: 10px;
-  }
-  .popup-card h3 {
-    margin: 0 0 10px;
-  }
-  .popup-buttons {
-    margin-top: 15px;
-    text-align: center;
-  }
-  .popup-buttons button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    font-size: 1em;
-  }
+// Style the Popup (can move to CSS file later)
+const style = document.createElement('style');
+style.textContent = `
+#incomingPopup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.popup-content {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+.popup-buttons button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
 `;
-document.head.appendChild(popupStyle);
+document.head.appendChild(style);
 
-// Show popup
-function showIncomingPopup(peerId, onAccept, onReject) {
-  document.getElementById('popupCallerId').textContent = peerId;
-  incomingPopup.style.display = 'block';
+// UI Handling Functions
+function showIncomingPopup(callerId, acceptCallback, rejectCallback) {
+  document.getElementById('popupCallerId').textContent = `Caller ID: ${callerId}`;
+  popup.style.display = 'flex';
 
-  const acceptBtn = document.getElementById('acceptCall');
-  const rejectBtn = document.getElementById('rejectCall');
-
-  acceptBtn.onclick = () => {
-    incomingPopup.style.display = 'none';
-    onAccept();
+  document.getElementById('acceptBtn').onclick = () => {
+    popup.style.display = 'none';
+    stopRingtone();
+    acceptCallback();
   };
-
-  rejectBtn.onclick = () => {
-    incomingPopup.style.display = 'none';
-    onReject();
+  document.getElementById('rejectBtn').onclick = () => {
+    popup.style.display = 'none';
+    stopRingtone();
+    rejectCallback();
   };
 }
