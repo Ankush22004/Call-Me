@@ -1,10 +1,5 @@
-let localStream;
-let peer;
-let currentCall;
-let callStartTime;
-let callTimer;
+let localStream, peer, currentCall, callStartTime, callTimer;
 
-// Get UI Elements
 const localVideo = document.getElementById('localVideo');
 const remoteVideo = document.getElementById('remoteVideo');
 const myIdSpan = document.getElementById('myId');
@@ -13,7 +8,7 @@ const statusDiv = document.getElementById('status');
 const incomingDiv = document.getElementById('incoming');
 const callerIdSpan = document.getElementById('callerId');
 
-// Get Media Stream
+// Media permission + Peer connection
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
   .then(stream => {
     localStream = stream;
@@ -26,28 +21,30 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     });
 
     peer.on('call', call => {
+      playRingtone();
       callerIdSpan.textContent = call.peer;
       incomingDiv.style.display = 'block';
       updateStatus(`Incoming call from ${call.peer}`, 'yellow');
 
-      // Accept/Reject prompt
       const accept = confirm(`Incoming call from ${call.peer}. Accept?`);
       if (accept) {
+        stopRingtone();
         call.answer(localStream);
         currentCall = call;
         handleCall(call);
       } else {
+        stopRingtone();
         call.close();
         updateStatus('Call Rejected', 'red');
       }
     });
   })
   .catch(err => {
-    alert('Error accessing camera/mic.');
+    alert('⚠️ Error accessing camera/microphone.');
     console.error(err);
   });
 
-// Handle Call Stream
+// Handle call stream
 function handleCall(call) {
   call.on('stream', remoteStream => {
     remoteVideo.srcObject = remoteStream;
@@ -58,13 +55,11 @@ function handleCall(call) {
   });
 
   call.on('close', () => {
-    remoteVideo.srcObject = null;
-    updateStatus('Call Ended', 'red');
-    stopCallTimer();
+    endCall();
   });
 }
 
-// Make a call
+// Start a call
 function makeCall() {
   const peerId = peerIdInput.value.trim();
   if (!peerId) return alert('Enter peer ID.');
@@ -81,23 +76,19 @@ function makeCall() {
   });
 
   call.on('close', () => {
-    remoteVideo.srcObject = null;
-    updateStatus('Call Ended', 'red');
-    stopCallTimer();
+    endCall();
   });
 }
 
-// End current call
+// End call
 function endCall() {
-  if (currentCall) {
-    currentCall.close();
-    remoteVideo.srcObject = null;
-    updateStatus('Call Ended', 'red');
-    stopCallTimer();
-  }
+  if (currentCall) currentCall.close();
+  remoteVideo.srcObject = null;
+  updateStatus('Call Ended', 'red');
+  stopCallTimer();
 }
 
-// Copy My ID
+// Copy my ID
 function copyMyId() {
   const id = myIdSpan.textContent;
   navigator.clipboard.writeText(id).then(() => {
@@ -105,13 +96,13 @@ function copyMyId() {
   });
 }
 
-// Update call status with color
+// Status helpers
 function updateStatus(text, color) {
   statusDiv.textContent = `Status: ${text}`;
   statusDiv.style.color = color;
 }
 
-// Start/Stop Timer
+// Timer helpers
 function startCallTimer() {
   callStartTime = Date.now();
   callTimer = setInterval(() => {
@@ -123,9 +114,8 @@ function stopCallTimer() {
   clearInterval(callTimer);
 }
 
-// Log calls (in console for now)
+// Call log
 function logCall(peerId, type) {
   const timestamp = new Date().toLocaleTimeString();
   console.log(`[${type} Call] with ${peerId} at ${timestamp}`);
 }
-<script src="js/webrtc-advanced.js"></script>
