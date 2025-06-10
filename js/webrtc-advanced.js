@@ -70,3 +70,39 @@ function logCall(type, peerId) {
     });
     localStorage.setItem("callLogs", JSON.stringify(logs));
 }
+// Incoming call answered
+acceptBtn.onclick = () => {
+    stopRingtone();
+    logCall("incoming", incomingCall.peer);
+    answerCall(incomingCall);
+};
+
+// Missed call
+incomingCall.on('close', () => {
+    if (!callAnswered) {
+        logCall("missed", incomingCall.peer);
+    }
+});
+
+// Outgoing call
+function makeCall(peerId) {
+    logCall("outgoing", peerId);
+    // continue...
+}
+
+<!-- Inside logs.html -->
+<ul id="logList"></ul>
+
+<script>
+const logs = JSON.parse(localStorage.getItem("callLogs") || "[]");
+const logList = document.getElementById("logList");
+
+logs.reverse().forEach(log => {
+    const li = document.createElement("li");
+    li.textContent = `${log.type.toUpperCase()} - ${log.peerId} - ${log.time}`;
+    logList.appendChild(li);
+});
+</script>
+
+
+
