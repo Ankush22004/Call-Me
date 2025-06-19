@@ -27,7 +27,6 @@ navigator.mediaDevices.getUserMedia({
   alert("Camera/Microphone permission is required.");
 });
 
-
 function makeCall() {
   const peerId = peerIdInput.value.trim();
   if (!peerId || !localStream) return;
@@ -59,7 +58,14 @@ function setupCallEvents(call) {
   call.on('stream', remoteStream => {
     remoteVideo.srcObject = remoteStream;
     statusDiv.textContent = "Connected";
+
+    // ✅ Try to improve bitrate
+    const sender = call.peerConnection.getSenders().find(s => s.track.kind === "video");
+    if (sender && sender.setParameters) {
+      sender.setParameters({ encodings: [{ maxBitrate: 1500000 }] }).catch(console.warn);
+    }
   });
+
   call.on('close', () => {
     statusDiv.textContent = "Call Ended";
     remoteVideo.srcObject = null;
