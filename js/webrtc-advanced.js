@@ -10,15 +10,23 @@ const incomingPopup = document.getElementById("incoming-popup");
 const acceptBtn = document.getElementById("accept-btn");
 const rejectBtn = document.getElementById("reject-btn");
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-  .then(stream => {
-    localStream = stream;
-    localVideo.srcObject = stream;
-  })
-  .catch(error => {
-    console.error("Media Error:", error);
-    alert("Camera/Microphone permission is required.");
-  });
+navigator.mediaDevices.getUserMedia({
+  video: {
+    width: { ideal: 1280 },
+    height: { ideal: 720 },
+    frameRate: { ideal: 30 }
+  },
+  audio: true
+})
+.then(stream => {
+  localStream = stream;
+  localVideo.srcObject = stream;
+})
+.catch(error => {
+  console.error("Media Error:", error);
+  alert("Camera/Microphone permission is required.");
+});
+
 
 function makeCall() {
   const peerId = peerIdInput.value.trim();
