@@ -10,6 +10,12 @@ const incomingPopup = document.getElementById("incoming-popup");
 const acceptBtn = document.getElementById("accept-btn");
 const rejectBtn = document.getElementById("reject-btn");
 
+const peer = new Peer();
+
+peer.on("open", id => {
+  document.getElementById("myId").textContent = id;
+});
+
 function getCallConstraints() {
   const mode = document.getElementById('callMode')?.value || 'video';
   if (mode === 'audio') {
@@ -20,7 +26,7 @@ function getCallConstraints() {
       audio: true
     };
   } else if (mode === 'mini') {
-    document.getElementById("localVideo").style.width = "120px";
+    document.getElementById("localVideo").style.setProperty("width", "120px", "important");
     return {
       video: { width: 160, height: 120 },
       audio: true
@@ -35,23 +41,11 @@ function getCallConstraints() {
     audio: true
   };
 }
-  
-  
-  navigator.mediaDevices.getUserMedia(getCallConstraints())
-  .then(stream => {
-  localStream = stream;
-  localVideo.srcObject = stream;
-})
-.catch(error => {
-  console.error("Media Error:", error);
-  alert("Camera/Microphone permission is required.");
-});
 
 function makeCall() {
   const peerId = peerIdInput.value.trim();
   if (!peerId) return;
 
-  // 🎯 Always get latest selected stream on Call
   navigator.mediaDevices.getUserMedia(getCallConstraints())
     .then(stream => {
       localStream = stream;
@@ -101,7 +95,6 @@ function setupCallEvents(call) {
     remoteVideo.srcObject = remoteStream;
     statusDiv.textContent = "Connected";
 
-    // ✅ Try to improve bitrate
     const sender = call.peerConnection.getSenders().find(s => s.track.kind === "video");
     if (sender && sender.setParameters) {
       sender.setParameters({ encodings: [{ maxBitrate: 1500000 }] }).catch(console.warn);
@@ -121,4 +114,11 @@ function endCall() {
   }
   statusDiv.textContent = "Call Ended";
   remoteVideo.srcObject = null;
+}
+
+function copyMyId() {
+  const myId = document.getElementById("myId").textContent;
+  navigator.clipboard.writeText(myId).then(() => {
+    alert("ID copied to clipboard!");
+  });
 }
