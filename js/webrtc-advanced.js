@@ -49,10 +49,22 @@ function getCallConstraints() {
 
 function makeCall() {
   const peerId = peerIdInput.value.trim();
-  if (!peerId || !localStream) return;
-  const call = peer.call(peerId, localStream);
-  setupCallEvents(call);
-  statusDiv.textContent = "Calling...";
+  if (!peerId) return;
+
+  // 🎯 Always get latest selected stream on Call
+  navigator.mediaDevices.getUserMedia(getCallConstraints())
+    .then(stream => {
+      localStream = stream;
+      localVideo.srcObject = stream;
+
+      const call = peer.call(peerId, localStream);
+      setupCallEvents(call);
+      statusDiv.textContent = "Calling...";
+    })
+    .catch(error => {
+      console.error("Media Error:", error);
+      alert("Camera/Microphone permission is required.");
+    });
 }
 
 peer.on('call', call => {
@@ -64,8 +76,18 @@ peer.on('call', call => {
 acceptBtn.onclick = () => {
   incomingPopup.style.display = "none";
   const call = window.pendingCall;
-  call.answer(localStream);
-  setupCallEvents(call);
+
+  navigator.mediaDevices.getUserMedia(getCallConstraints())
+    .then(stream => {
+      localStream = stream;
+      localVideo.srcObject = stream;
+      call.answer(localStream);
+      setupCallEvents(call);
+    })
+    .catch(error => {
+      console.error("Media Error:", error);
+      alert("Camera/Microphone permission is required.");
+    });
 };
 
 rejectBtn.onclick = () => {
