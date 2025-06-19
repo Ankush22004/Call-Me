@@ -10,8 +10,6 @@ const incomingPopup = document.getElementById("incoming-popup");
 const acceptBtn = document.getElementById("accept-btn");
 const rejectBtn = document.getElementById("reject-btn");
 
-
-navigator.mediaDevices.getUserMedia(getCallConstraints())
 function getCallConstraints() {
   const mode = document.getElementById('callMode')?.value || 'video';
   if (mode === 'audio') {
@@ -39,7 +37,7 @@ function getCallConstraints() {
 }
   
   
-  
+  navigator.mediaDevices.getUserMedia(getCallConstraints())
   .then(stream => {
   localStream = stream;
   localVideo.srcObject = stream;
