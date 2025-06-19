@@ -15,11 +15,16 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     localStream = stream;
     localVideo.srcObject = stream;
 
-    peer = new Peer({
-      host: "0.peerjs.com",
-      port: 443,
-      secure: true
-    });
+    const peer = new Peer();
+
+peer.on('open', id => {
+  console.log("✅ Your Peer ID is:", id);
+  document.getElementById('myId').textContent = id;
+});
+
+peer.on('error', err => {
+  console.error("❌ PeerJS Error:", err);
+});
 
     peer.on('open', id => {
       myIdSpan.textContent = id;
