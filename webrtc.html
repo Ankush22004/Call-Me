@@ -28,6 +28,13 @@
     <!-- 📞 Call Controls -->
     <div class="call-section">
       <input type="text" id="peerIdInput" placeholder="Enter ID to call" />
+      <label for="callMode">Choose Call Type:</label>
+  <select id="callMode">
+    <option value="video">🎥 Video Call</option>
+    <option value="audio">🔊 Audio Only</option>
+    <option value="fast">⚡ Fast Connect</option>
+    <option value="mini">🎮 Mini Mode</option>
+  </select>
       <button onclick="makeCall()">📞 Call</button>
       <button onclick="endCall()">❌ End</button>
     </div>
