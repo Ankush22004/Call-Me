@@ -1,52 +1,41 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BharatVerse - Call Me</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BharatVerse WebRTC Call</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="home">
-    <h1>📱 Welcome to Call Me</h1>
-    <p>Smart calling, Bharat powered 🇮🇳</p>
-    <a href="dashboard.html" class="btn">Go to Dashboard</a>
-  </main>
+  <h1>📞 BharatVerse Call</h1>
+  <div id="call-ui">
+    <p>Your ID: <span id="my-id">Generating...</span></p>
+    <input type="text" id="peer-id" placeholder="Enter Peer ID to Call" />
+    <button id="call-btn">Call</button>
+  </div>
 
-  <!-- Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
-    }
-  </script>
+  <div id="incoming-call" style="display: none;">
+    <p>Incoming call from <span id="caller-id"></span></p>
+    <button id="accept-btn">Accept</button>
+    <button id="reject-btn">Reject</button>
+  </div>
 
-  <!-- Install App (PWA Prompt) -->
-  <script>
-    let deferredPrompt;
+  <div id="video-section" style="display:none;">
+    <video id="local-video" autoplay muted></video>
+    <video id="remote-video" autoplay></video>
+    <div>
+      <button id="mute-btn">Mute</button>
+      <button id="video-toggle-btn">Video Off</button>
+      <button id="speaker-btn">Speaker</button>
+      <button id="end-call-btn">End Call</button>
+    </div>
+    <p id="call-status">Call not started</p>
+  </div>
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-
-      const installBtn = document.createElement('button');
-      installBtn.textContent = "📥 Install App";
-      installBtn.style = "position:fixed; bottom:20px; right:20px; background:#1a237e; color:white; border:none; padding:12px 16px; border-radius:5px; cursor:pointer; z-index:1000;";
-      document.body.appendChild(installBtn);
-
-      installBtn.addEventListener('click', () => {
-        installBtn.style.display = 'none';
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(choiceResult => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted install');
-          } else {
-            console.log('User dismissed install');
-          }
-          deferredPrompt = null;
-        });
-      });
-    });
-  </script>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="webrtc.js"></script>
+  <script src="webrtc-advanced.js"></script>
+  <script src="webrtc-ui.js"></script>
 </body>
 </html>
