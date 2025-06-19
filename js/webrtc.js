@@ -1,4 +1,4 @@
-et localStream, peer, currentCall, callStartTime, callTimer;
+let localStream, peer, currentCall, callStartTime, callTimer;
 
 const localVideo = document.getElementById('localVideo');
 const remoteVideo = document.getElementById('remoteVideo');
