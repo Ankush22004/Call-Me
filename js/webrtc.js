@@ -1,9 +1,9 @@
 let localStream, peer, currentCall, callStartTime, callTimer;Add commentMore actions
-et localStream, peer, currentCall, callStartTime, callTimer;
+let localStream, peer, currentCall, callStartTime, callTimer;
 
 const localVideo = document.getElementById('localVideo');Add commentMore actions
 const remoteVideo = document.getElementById('remoteVideo');
-@@ -8,46 +8,45 @@ const statusDiv = document.getElementById('status');
+const statusDiv = document.getElementById('status');
 const incomingDiv = document.getElementById('incoming');
 const callerIdSpan = document.getElementById('callerId');
 const acceptBtn = document.getElementById("accept-btn");
@@ -69,7 +69,7 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 function handleCall(call) {
   call.on('stream', remoteStream => {
     remoteVideo.srcObject = remoteStream;
-@@ -62,7 +61,6 @@ function handleCall(call) {
+function handleCall(call) {
   });
 }
 
@@ -77,7 +77,7 @@ function handleCall(call) {
 function makeCall() {
   const peerId = peerIdInput.value.trim();
   if (!peerId) return alert('Enter peer ID.');
-@@ -83,7 +81,6 @@ function makeCall() {
+function makeCall() {
   });
 }
 
@@ -85,7 +85,7 @@ function makeCall() {
 function endCall() {
   if (currentCall) {
     currentCall.close();
-@@ -94,21 +91,18 @@ function endCall() {
+function endCall() {
   stopCallTimer();
 }
 
@@ -107,7 +107,7 @@ function updateStatus(text, color) {
 function startCallTimer() {
   callStartTime = Date.now();
   callTimer = setInterval(() => {
-@@ -120,7 +114,6 @@ function stopCallTimer() {
+function stopCallTimer() {
   clearInterval(callTimer);
 }
 
