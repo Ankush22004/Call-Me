@@ -1,51 +1,68 @@
-const callBtn = document.getElementById('call-btn');
-const peerIdInput = document.getElementById('peer-id');
-const localVideo = document.getElementById('local-video');
-const remoteVideo = document.getElementById('remote-video');
-const endCallBtn = document.getElementById('end-call-btn');
+let localStream = null;
+let currentCall = null;
 
-let localStream, currentCall;
+const localVideo = document.getElementById("localVideo");
+const remoteVideo = document.getElementById("remoteVideo");
+const statusDiv = document.getElementById("status");
+const peerIdInput = document.getElementById("peerIdInput");
+const callerIdSpan = document.getElementById("caller-id");
+const incomingPopup = document.getElementById("incoming-popup");
+const acceptBtn = document.getElementById("accept-btn");
+const rejectBtn = document.getElementById("reject-btn");
 
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
   .then(stream => {
-    localVideo.srcObject = stream;
     localStream = stream;
+    localVideo.srcObject = stream;
+  })
+  .catch(error => {
+    console.error("Media Error:", error);
+    alert("Camera/Microphone permission is required.");
   });
 
-callBtn.onclick = () => {
-  const call = peer.call(peerIdInput.value, localStream);
-  setupCall(call);
-};
+function makeCall() {
+  const peerId = peerIdInput.value.trim();
+  if (!peerId || !localStream) return;
+  const call = peer.call(peerId, localStream);
+  setupCallEvents(call);
+  statusDiv.textContent = "Calling...";
+}
 
 peer.on('call', call => {
-  call.answer(localStream);
-  document.getElementById("incoming-call").style.display = "block";
-  document.getElementById("caller-id").textContent = call.peer;
+  callerIdSpan.textContent = call.peer;
+  incomingPopup.style.display = "block";
   window.pendingCall = call;
 });
 
-document.getElementById('accept-btn').onclick = () => {
-  document.getElementById("incoming-call").style.display = "none";
-  setupCall(window.pendingCall);
-};
-document.getElementById('reject-btn').onclick = () => {
-  window.pendingCall.close();
-  document.getElementById("incoming-call").style.display = "none";
+acceptBtn.onclick = () => {
+  incomingPopup.style.display = "none";
+  const call = window.pendingCall;
+  call.answer(localStream);
+  setupCallEvents(call);
 };
 
-function setupCall(call) {
+rejectBtn.onclick = () => {
+  if (window.pendingCall) window.pendingCall.close();
+  incomingPopup.style.display = "none";
+};
+
+function setupCallEvents(call) {
   currentCall = call;
   call.on('stream', remoteStream => {
     remoteVideo.srcObject = remoteStream;
-    document.getElementById("video-section").style.display = "block";
+    statusDiv.textContent = "Connected";
   });
   call.on('close', () => {
-    document.getElementById("call-status").textContent = "Call Ended";
-    document.getElementById("video-section").style.display = "none";
+    statusDiv.textContent = "Call Ended";
+    remoteVideo.srcObject = null;
   });
 }
 
-endCallBtn.onclick = () => {
-  if (currentCall) currentCall.close();
-};
-
+function endCall() {
+  if (currentCall) {
+    currentCall.close();
+    currentCall = null;
+  }
+  statusDiv.textContent = "Call Ended";
+  remoteVideo.srcObject = null;
+}
