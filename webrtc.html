@@ -3,58 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WebRTC Call - Call Me</title>
+  <title>BharatVerse - Simple Call</title>
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
 </head>
 <body>
   <header class="header">
     <h1>📡 WebRTC Call</h1>
-    <p>Browser-based secure calling</p>
+    <p>Only Call — No Extra Features</p>
   </header>
 
-  <main class="webrtc-page">
-    <!-- 📷 Video Views -->
+  <main>
     <video id="localVideo" autoplay muted playsinline></video>
     <video id="remoteVideo" autoplay playsinline></video>
 
-    <!-- 🆔 User ID Display -->
     <div class="id-section">
       <p>Your ID: <span id="myId">Generating...</span>
         <button onclick="copyMyId()">📋 Copy</button>
       </p>
     </div>
 
-    <!-- 📞 Call Controls -->
-    <div class="call-section">
-      <input type="text" id="peerIdInput" placeholder="Enter ID to call" />
-      <label for="callMode">Choose Call Type:</label>
-  <select id="callMode">
-    <option value="video">🎥 Video Call</option>
-    <option value="audio">🔊 Audio Only</option>
-    <option value="fast">⚡ Fast Connect</option>
-    <option value="mini">🎮 Mini Mode</option>
-  </select>
-      <button onclick="makeCall()">📞 Call</button>
-      <button onclick="endCall()">❌ End</button>
-    </div>
+    <input type="text" id="peerIdInput" placeholder="Enter ID to call" />
+    <button onclick="makeCall()">📞 Call</button>
+    <button onclick="endCall()">❌ End</button>
 
-    <!-- 🔁 Status -->
-    <div id="status" style="margin-top: 10px;">Status: Not Connected</div>
-
-    <!-- 📥 Incoming Call Display -->
-    <div id="incoming-popup" class="popup-container" style="display: none;">
-      <div class="popup-box">
-        <p>Incoming Call from: <span id="caller-id"></span></p>
-        <div class="popup-buttons">
-          <button id="accept-btn" class="accept">✅ Accept</button>
-          <button id="reject-btn" class="reject">❌ Reject</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 🔙 Back Link -->
-    <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
+    <div id="status">Status: Not Connected</div>
   </main>
 
   <!-- ✅ Scripts Load Order -->
