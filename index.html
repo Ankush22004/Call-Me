@@ -1,44 +1,53 @@
-<!DOCTYPE html>More actions
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WebRTC Call - Call Me</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-<script src="js/webrtc-ui.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BharatVerse - Call Me</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <header class="header">
-    <h1>📡 WebRTC Call</h1>
-    <p>Browser-based secure calling</p>
-  </header>
-
-  <main class="webrtc-page">
-    <video id="localVideo" autoplay muted playsinline></video>
-    <video id="remoteVideo" autoplay playsinline></video>
-
-    <div class="id-section">
-      <p>Your ID: <span id="myId">Generating...</span>
-        <button onclick="copyMyId()">📋 Copy</button>
-      </p>
-    </div>
-
-    <div class="call-section">
-      <input type="text" id="peerIdInput" placeholder="Enter ID to call" />
-      <button onclick="makeCall()">📞 Call</button>
-      <button onclick="endCall()">❌ End</button>
-    </div>
-
-    <div id="status" style="margin-top: 10px;">Status: Not Connected</div>
-    <div id="incoming" style="display:none;">📥 Incoming Call from <span id="callerId"></span></div>
-
-    <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
+  <main class="home">
+    <h1>📱 Welcome to Call Me</h1>
+    <p>Smart calling, Bharat powered 🇮🇳</p>
+    <a href="dashboard.html" class="btn">Go to Dashboard</a>
   </main>
 
-<script src="js/webrtc.js"></script>
-<script src="js/webrtc-advanced.js"></script>
-<script src="js/webrtc-ui.js"></script>
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+
+  <!-- Install App (PWA Prompt) -->
+  <script>
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      const installBtn = document.createElement('button');
+      installBtn.textContent = "📥 Install App";
+      installBtn.style = "position:fixed; bottom:20px; right:20px; background:#1a237e; color:white; border:none; padding:12px 16px; border-radius:5px; cursor:pointer; z-index:1000;";
+      document.body.appendChild(installBtn);
+
+      installBtn.addEventListener('click', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted install');
+          } else {
+            console.log('User dismissed install');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>
