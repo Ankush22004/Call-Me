@@ -10,15 +10,37 @@ const incomingPopup = document.getElementById("incoming-popup");
 const acceptBtn = document.getElementById("accept-btn");
 const rejectBtn = document.getElementById("reject-btn");
 
-navigator.mediaDevices.getUserMedia({
-  video: {
-    width: { ideal: 1280 },
-    height: { ideal: 720 },
-    frameRate: { ideal: 30 }
-  },
-  audio: true
-})
-.then(stream => {
+
+navigator.mediaDevices.getUserMedia(getCallConstraints())
+function getCallConstraints() {
+  const mode = document.getElementById('callMode')?.value || 'video';
+  if (mode === 'audio') {
+    return { video: false, audio: true };
+  } else if (mode === 'fast') {
+    return {
+      video: { width: { ideal: 320 }, height: { ideal: 240 } },
+      audio: true
+    };
+  } else if (mode === 'mini') {
+    document.getElementById("localVideo").style.width = "120px";
+    return {
+      video: { width: 160, height: 120 },
+      audio: true
+    };
+  }
+  return {
+    video: {
+      width: { ideal: 1280 },
+      height: { ideal: 720 },
+      frameRate: { ideal: 30 }
+    },
+    audio: true
+  };
+}
+  
+  
+  
+  .then(stream => {
   localStream = stream;
   localVideo.srcObject = stream;
 })
