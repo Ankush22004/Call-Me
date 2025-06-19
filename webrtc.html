@@ -14,40 +14,53 @@
   </header>
 
   <main class="webrtc-page">
+    <!-- 🎥 Video Streams -->
     <video id="localVideo" autoplay muted playsinline></video>
     <video id="remoteVideo" autoplay playsinline></video>
 
+    <!-- 🔐 My ID Display -->
     <div class="id-section">
       <p>Your ID: <span id="myId">Generating...</span>
         <button onclick="copyMyId()">📋 Copy</button>
       </p>
     </div>
 
+    <!-- 📞 Call Controls -->
     <div class="call-section">
       <input type="text" id="peerIdInput" placeholder="Enter ID to call" />
       <button onclick="makeCall()">📞 Call</button>
       <button onclick="endCall()">❌ End</button>
     </div>
 
-    <div id="status" style="margin-top: 10px;">Status: Not Connected</div>
-    <div id="incoming" style="display:none;">📥 Incoming Call from <span id="callerId"></span></div>
+    <!-- 🎛 Dynamic Buttons: Mute / Video / Speaker (Auto inserted by JS) -->
+    <div class="call-section" id="extraControls"></div>
 
-    <div id="incoming-popup" style="display: none;" class="popup-container">
-  <div class="popup-box">
-    <p>Incoming Call from: <span id="caller-id"></span></p>
-    <div class="popup-buttons">
-      <button id="accept-btn" class="accept">Accept</button>
-      <button id="reject-btn" class="reject">Reject</button>
+    <!-- 📶 Status -->
+    <div id="status" style="margin-top: 10px;">Status: Not Connected</div>
+
+    <!-- 🔔 Old fallback incoming alert -->
+    <div id="incoming" style="display:none;">
+      📥 Incoming Call from <span id="callerId"></span>
     </div>
-  </div>
-</div>
-    
+
+    <!-- ✅ Modern Incoming Call Popup -->
+    <div id="incoming-popup" style="display: none;" class="popup-container">
+      <div class="popup-box">
+        <p>📞 Incoming Call from: <span id="caller-id"></span></p>
+        <div class="popup-buttons">
+          <button id="accept-btn" class="accept">✅ Accept</button>
+          <button id="reject-btn" class="reject">❌ Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔙 Back -->
     <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
   </main>
 
-<script src="js/webrtc-ui.js"></script>
-<script src="js/webrtc-advanced.js"></script>
-<script src="js/webrtc.js"></script>
-  
+  <!-- 📜 Scripts -->
+  <script src="js/webrtc-ui.js"></script>
+  <script src="js/webrtc-advanced.js"></script>
+  <script src="js/webrtc.js"></script>
 </body>
 </html>
