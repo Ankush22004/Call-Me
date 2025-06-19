@@ -382,3 +382,46 @@ video {
   border-radius: 5px;
 }
 
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #101010;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+video {
+  width: 45%;
+  margin: 10px;
+  background: black;
+}
+
+.call-section, .id-section {
+  margin: 20px;
+}
+
+.popup-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #333;
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.accept {
+  background: green;
+  color: white;
+  padding: 5px 10px;
+}
+
+.reject {
+  background: red;
+  color: white;
+  padding: 5px 10px;
+}
+
+
