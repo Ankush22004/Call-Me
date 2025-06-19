@@ -1,4 +1,4 @@
-<!DOCTYPE html>More actions
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -14,42 +14,45 @@
   </header>
 
   <main class="webrtc-page">
+    <!-- 📷 Video Views -->
     <video id="localVideo" autoplay muted playsinline></video>
     <video id="remoteVideo" autoplay playsinline></video>
 
+    <!-- 🆔 User ID Display -->
     <div class="id-section">
       <p>Your ID: <span id="myId">Generating...</span>
         <button onclick="copyMyId()">📋 Copy</button>
       </p>
     </div>
 
+    <!-- 📞 Call Controls -->
     <div class="call-section">
       <input type="text" id="peerIdInput" placeholder="Enter ID to call" />
       <button onclick="makeCall()">📞 Call</button>
       <button onclick="endCall()">❌ End</button>
     </div>
 
+    <!-- 🔁 Status -->
     <div id="status" style="margin-top: 10px;">Status: Not Connected</div>
-    <div id="incoming" style="display:none;">📥 Incoming Call from <span id="callerId"></span></div>
 
-    <div id="incoming-popup" style="display: none;" class="popup-container">
-  <div class="popup-box">
-    <p>Incoming Call from: <span id="caller-id"></span></p>
-    <div class="popup-buttons">
-      <button id="accept-btn" class="accept">Accept</button>
-      <button id="reject-btn" class="reject">Reject</button>
+    <!-- 📥 Incoming Call Display -->
+    <div id="incoming-popup" class="popup-container" style="display: none;">
+      <div class="popup-box">
+        <p>Incoming Call from: <span id="caller-id"></span></p>
+        <div class="popup-buttons">
+          <button id="accept-btn" class="accept">✅ Accept</button>
+          <button id="reject-btn" class="reject">❌ Reject</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
+    <!-- 🔙 Back Link -->
     <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
   </main>
 
-<script src="js/webrtc.js"></script>
-<script src="js/webrtc-advanced.js"></script>
-<script src="js/webrtc-ui.js"></script>
-<script src="js/webrtc-advanced.js"></script>
-<script src="js/webrtc.js"></script>
-
+  <!-- ✅ Scripts Load Order -->
+  <script src="js/webrtc.js"></script>
+  <script src="js/webrtc-advanced.js"></script>
+  <script src="js/webrtc-ui.js"></script>
 </body>
 </html>
