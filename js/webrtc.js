@@ -13,6 +13,12 @@ const rejectBtn = document.getElementById("reject-btn");
 
 // ✅ Initialize Peer first (globally)
 peer = new Peer();
+peer = new Peer({
+  host: 'peerjs.com',
+  port: 443,
+  path: '/',
+  secure: true
+});
 
 peer.on('open', id => {
   console.log("✅ Your Peer ID is:", id);
