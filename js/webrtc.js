@@ -15,8 +15,9 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     peer = new Peer(); // Random ID
 
     peer.on('open', id => {
-      alert(`🆔 Your ID: ${id}\nSend this ID to your friend to receive the call.`);
+      myIdSpan.textContent = id;
     });
+
 
     // Step 3: Answer Incoming Calls
     peer.on('call', call => {
