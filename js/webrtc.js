@@ -1,114 +1,130 @@
 let localStream;
 let peer;
 let currentCall;
+let callStartTime;
+let callTimer;
 
 const localVideo = document.getElementById('localVideo');
 const remoteVideo = document.getElementById('remoteVideo');
 const myIdSpan = document.getElementById('myId');
-const callStatus = document.getElementById('callStatus');
-const callLogs = document.getElementById('callLogs');
+const peerIdInput = document.getElementById('peerIdInput');
+const statusDiv = document.getElementById('status');
+const incomingDiv = document.getElementById('incoming');
+const callerIdSpan = document.getElementById('callerId');
 
-// Load previous logs
-loadLogs();
-
-// Step 1: Get User Media
+// Get Media Stream
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
   .then(stream => {
     localStream = stream;
     localVideo.srcObject = stream;
 
-    // Step 2: Create Peer
     peer = new Peer();
 
     peer.on('open', id => {
       myIdSpan.textContent = id;
     });
 
-    // Step 3: Answer Incoming Calls
     peer.on('call', call => {
-      const accept = confirm(`📞 Incoming call from: ${call.peer}. Accept?`);
+      callerIdSpan.textContent = call.peer;
+      incomingDiv.style.display = 'block';
+      updateStatus(`Incoming call from ${call.peer}`, 'orange');
+
+      const accept = confirm(`📥 Incoming call from ${call.peer}. Accept?`);
       if (accept) {
-        callStatus.textContent = `Status: In call with ${call.peer}`;
         call.answer(localStream);
         currentCall = call;
-
-        logCall("📥 Incoming", call.peer);
-
-        call.on('stream', remoteStream => {
-          remoteVideo.srcObject = remoteStream;
-        });
-
-        call.on('close', () => {
-          callStatus.textContent = `Status: Call ended`;
-        });
+        handleCall(call);
       } else {
-        logCall("❌ Rejected", call.peer);
+        call.close();
+        updateStatus('Call Rejected', 'red');
+        incomingDiv.style.display = 'none';
       }
     });
   })
-  .catch(error => {
-    console.error('Media Error:', error);
-    alert('Failed to access camera/mic');
+  .catch(err => {
+    alert('❌ Error accessing camera/mic.');
+    console.error(err);
   });
 
-// 📞 Manual Call
-function makeCall() {
-  const remoteId = document.getElementById('peerId').value.trim();
-  if (!remoteId || !peer || !localStream) return;
-
-  callStatus.textContent = `Status: Calling ${remoteId}...`;
-
-  const call = peer.call(remoteId, localStream);
-  currentCall = call;
-
-  logCall("📤 Outgoing", remoteId);
-
+// Handle the call stream
+function handleCall(call) {
   call.on('stream', remoteStream => {
     remoteVideo.srcObject = remoteStream;
-    callStatus.textContent = `Status: In call with ${remoteId}`;
+    incomingDiv.style.display = 'none';
+    updateStatus('In Call', 'green');
+    startCallTimer();
+    logCall(call.peer, 'Received');
   });
 
   call.on('close', () => {
-    callStatus.textContent = `Status: Call ended`;
+    remoteVideo.srcObject = null;
+    updateStatus('Call Ended', 'red');
+    stopCallTimer();
   });
 }
 
-// ❌ End Call
+// Make a call
+function makeCall() {
+  const peerId = peerIdInput.value.trim();
+  if (!peerId) return alert('Enter peer ID.');
+
+  const call = peer.call(peerId, localStream);
+  currentCall = call;
+  updateStatus(`Calling ${peerId}...`, 'orange');
+
+  call.on('stream', remoteStream => {
+    remoteVideo.srcObject = remoteStream;
+    updateStatus('In Call', 'green');
+    startCallTimer();
+    logCall(peerId, 'Outgoing');
+  });
+
+  call.on('close', () => {
+    remoteVideo.srcObject = null;
+    updateStatus('Call Ended', 'red');
+    stopCallTimer();
+  });
+}
+
+// End current call
 function endCall() {
   if (currentCall) {
     currentCall.close();
-    currentCall = null;
     remoteVideo.srcObject = null;
-    callStatus.textContent = `Status: Call ended`;
+    updateStatus('Call Ended', 'red');
+    stopCallTimer();
   }
 }
 
-// 📋 Copy My ID
+// Copy My ID
 function copyMyId() {
   const id = myIdSpan.textContent;
-  navigator.clipboard.writeText(id)
-    .then(() => alert("🆔 ID Copied!"))
-    .catch(() => alert("❌ Failed to copy"));
-}
-
-// 📃 Call Logs
-function logCall(type, peerId) {
-  const log = `${type} call with ${peerId} at ${new Date().toLocaleTimeString()}`;
-  const li = document.createElement('li');
-  li.textContent = log;
-  callLogs.prepend(li);
-
-  // Save to localStorage
-  let logs = JSON.parse(localStorage.getItem('callLogs') || '[]');
-  logs.unshift(log);
-  localStorage.setItem('callLogs', JSON.stringify(logs));
-}
-
-function loadLogs() {
-  let logs = JSON.parse(localStorage.getItem('callLogs') || '[]');
-  logs.forEach(log => {
-    const li = document.createElement('li');
-    li.textContent = log;
-    callLogs.appendChild(li);
+  navigator.clipboard.writeText(id).then(() => {
+    alert("✅ ID copied to clipboard!");
   });
+}
+
+// Update call status with color
+function updateStatus(text, color) {
+  statusDiv.textContent = `Status: ${text}`;
+  statusDiv.style.color = color;
+}
+
+// Start/Stop Timer
+function startCallTimer() {
+  callStartTime = Date.now();
+  callTimer = setInterval(() => {
+    const seconds = Math.floor((Date.now() - callStartTime) / 1000);
+    statusDiv.textContent = `Status: In Call (${seconds}s)`;
+    statusDiv.style.color = 'green';
+  }, 1000);
+}
+function stopCallTimer() {
+  clearInterval(callTimer);
+}
+
+// Log calls in console
+function logCall(peerId, type) {
+  const timestamp = new Date().toLocaleTimeString();
+  console.log(`[${type} Call] with ${peerId} at ${timestamp}`);
 }
