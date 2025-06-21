@@ -2,77 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contacts - Call Me</title>
+  <link rel="stylesheet" href="css/style.css">
   <style>
-    body { font-family: sans-serif; padding: 20px; padding-bottom: 80px; }
-    input, button { padding: 8px; margin: 5px; }
-    ul { list-style: none; padding: 0; }
-    li { background: #eee; margin: 5px 0; padding: 10px; border-radius: 5px; }
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      padding-bottom: 80px;
+    }
+    .contacts-page {
+      max-width: 500px;
+      margin: auto;
+    }
+    #searchBar, #nameInput, #phoneInput {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .contact-form {
+      margin-bottom: 20px;
+    }
+    #contactsList li {
+      background: #eee;
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+    }
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #555;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
-  <h2>👥 My Contacts</h2>
-  <form id="contactForm">
-    <input type="text" id="name" placeholder="Name" required>
-    <input type="tel" id="phone" placeholder="Phone" required>
-    <button type="submit">Add</button>
-  </form>
+  <header class="header">
+    <h1>📇 Contacts</h1>
+    <input type="text" id="searchBar" placeholder="🔍 Search contacts..." />
+  </header>
 
-  <ul id="contactList"></ul>
+  <main class="contacts-page">
+    <div class="contact-form">
+      <input type="text" id="nameInput" placeholder="👤 Enter name" required />
+      <input type="tel" id="phoneInput" placeholder="📞 Enter phone number" required />
+      <button onclick="addContact()">➕ Add Contact</button>
+    </div>
+
+    <ul id="contactsList"></ul>
+
+    <a href="index.html" class="back-link">🔙 Back to Dashboard</a>
+  </main>
 
   <script>
-    const form = document.getElementById('contactForm');
-    const list = document.getElementById('contactList');
+    const searchInput = document.getElementById("searchBar");
+    const contactsList = document.getElementById("contactsList");
+    const nameInput = document.getElementById("nameInput");
+    const phoneInput = document.getElementById("phoneInput");
 
     function loadContacts() {
-      const contacts = JSON.parse(localStorage.getItem('myContacts') || "[]");
-      list.innerHTML = '';
-      contacts.forEach(c => {
-        const li = document.createElement('li');
-        li.textContent = `${c.name} - ${c.phone}`;
-        list.appendChild(li);
+      const contacts = JSON.parse(localStorage.getItem("myContacts") || "[]");
+      contactsList.innerHTML = "";
+
+      contacts.forEach(contact => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `tel:${contact.phone}`;
+        link.textContent = `👤 ${contact.name} (${contact.phone})`;
+        li.appendChild(link);
+        contactsList.appendChild(li);
       });
     }
 
-    form.onsubmit = e => {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const contacts = JSON.parse(localStorage.getItem('myContacts') || "[]");
+    function addContact() {
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+
+      if (!name || !phone) {
+        alert("Please fill in both name and phone.");
+        return;
+      }
+
+      const contacts = JSON.parse(localStorage.getItem("myContacts") || "[]");
       contacts.push({ name, phone });
-      localStorage.setItem('myContacts', JSON.stringify(contacts));
-      form.reset();
+      localStorage.setItem("myContacts", JSON.stringify(contacts));
+
+      nameInput.value = "";
+      phoneInput.value = "";
       loadContacts();
     }
 
+    // Search Filter
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      const items = contactsList.querySelectorAll("li");
+      items.forEach(item => {
+        const name = item.textContent.toLowerCase();
+        item.style.display = name.includes(query) ? "block" : "none";
+      });
+    });
+
+    // Load on start
     loadContacts();
   </script>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <a href="index.html">🏠 Home</a>
-    <a href="call.html">📞 Call</a>
-    <a href="contacts.html">👥 Contacts</a>
-    <a href="logs.html">📜 Logs</a>
-    <a href="webrtc.html">🎥 Video</a>
-  </nav>
-
-  <style>
-    .navbar {
-      display: flex;
-      justify-content: space-around;
-      background: #222;
-      color: white;
-      padding: 10px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-    }
-  </style>
 </body>
 </html>
