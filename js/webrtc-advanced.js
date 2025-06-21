@@ -6,7 +6,7 @@ const speakerBtn = document.createElement('button');
 
 let isMuted = false;
 let isVideoOn = true;
-let ringtone = new Audio('media/ringtone.mp3');
+let ringtone = new Audio('sounds/Song.mp3');
 ringtone.loop = true;
 
 // Append buttons
