@@ -11,24 +11,30 @@
       padding: 20px;
       padding-bottom: 80px;
     }
-    .contacts-page {
-      max-width: 500px;
-      margin: auto;
-    }
-    #searchBar, #nameInput, #phoneInput {
+    input, button {
       padding: 10px;
-      width: 100%;
-      margin-bottom: 10px;
       font-size: 16px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .contact-form {
-      margin-bottom: 20px;
-    }
-    #contactsList li {
-      background: #eee;
+    ul { list-style: none; padding: 0; }
+    li {
+      background: #f2f2f2;
+      margin: 5px 0;
       padding: 10px;
-      margin-bottom: 5px;
       border-radius: 8px;
+    }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .actions button {
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
     }
     .back-link {
       display: block;
@@ -40,73 +46,121 @@
   </style>
 </head>
 <body>
-  <header class="header">
-    <h1>📇 Contacts</h1>
-    <input type="text" id="searchBar" placeholder="🔍 Search contacts..." />
-  </header>
 
-  <main class="contacts-page">
-    <div class="contact-form">
-      <input type="text" id="nameInput" placeholder="👤 Enter name" required />
-      <input type="tel" id="phoneInput" placeholder="📞 Enter phone number" required />
-      <button onclick="addContact()">➕ Add Contact</button>
-    </div>
+  <h2>📇 My Contacts</h2>
 
-    <ul id="contactsList"></ul>
+  <input type="text" id="searchBar" placeholder="🔍 Search contacts..." />
 
-    <a href="index.html" class="back-link">🔙 Back to Dashboard</a>
-  </main>
+  <form id="contactForm">
+    <input type="text" id="nameInput" placeholder="👤 Enter name" required />
+    <input type="tel" id="phoneInput" placeholder="📞 Enter phone number" required />
+    <button type="submit">➕ Save Contact</button>
+  </form>
+
+  <ul id="contactsList"></ul>
+
+  <a href="index.html" class="back-link">🔙 Back to Dashboard</a>
 
   <script>
-    const searchInput = document.getElementById("searchBar");
-    const contactsList = document.getElementById("contactsList");
+    const contactForm = document.getElementById("contactForm");
     const nameInput = document.getElementById("nameInput");
     const phoneInput = document.getElementById("phoneInput");
+    const contactsList = document.getElementById("contactsList");
+    const searchBar = document.getElementById("searchBar");
 
-    function loadContacts() {
-      const contacts = JSON.parse(localStorage.getItem("myContacts") || "[]");
-      contactsList.innerHTML = "";
+    let editingIndex = -1;
 
-      contacts.forEach(contact => {
-        const li = document.createElement("li");
-        const link = document.createElement("a");
-        link.href = `tel:${contact.phone}`;
-        link.textContent = `👤 ${contact.name} (${contact.phone})`;
-        li.appendChild(link);
-        contactsList.appendChild(li);
+    function getContacts() {
+      return JSON.parse(localStorage.getItem("myContacts") || "[]");
+    }
+
+    function saveContacts(contacts) {
+      localStorage.setItem("myContacts", JSON.stringify(contacts));
+    }
+
+    function renderContacts() {
+      const query = searchBar.value.toLowerCase();
+      const contacts = getContacts();
+      contactsList.innerHTML = '';
+
+      contacts.forEach((c, index) => {
+        if (c.name.toLowerCase().includes(query) || c.phone.includes(query)) {
+          const li = document.createElement("li");
+
+          const link = document.createElement("a");
+          link.href = `tel:${c.phone}`;
+          link.textContent = `👤 ${c.name} - ${c.phone}`;
+          link.style.textDecoration = "none";
+
+          const actions = document.createElement("div");
+          actions.className = "actions";
+
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "✏️ Edit";
+          editBtn.onclick = () => {
+            nameInput.value = c.name;
+            phoneInput.value = c.phone;
+            editingIndex = index;
+          };
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "🗑️ Delete";
+          deleteBtn.onclick = () => {
+            const contacts = getContacts();
+            contacts.splice(index, 1);
+            saveContacts(contacts);
+            renderContacts();
+          };
+
+          actions.appendChild(editBtn);
+          actions.appendChild(deleteBtn);
+          li.appendChild(link);
+          li.appendChild(actions);
+          contactsList.appendChild(li);
+        }
       });
     }
 
-    function addContact() {
+    contactForm.onsubmit = (e) => {
+      e.preventDefault();
       const name = nameInput.value.trim();
       const phone = phoneInput.value.trim();
+      if (!name || !phone) return alert("Please fill both fields");
 
-      if (!name || !phone) {
-        alert("Please fill in both name and phone.");
-        return;
+      const contacts = getContacts();
+
+      if (editingIndex >= 0) {
+        contacts[editingIndex] = { name, phone };
+        editingIndex = -1;
+      } else {
+        // prevent duplicate
+        const exists = contacts.find(c => c.phone === phone);
+        if (exists) return alert("Contact with this number already exists!");
+        contacts.push({ name, phone });
       }
 
-      const contacts = JSON.parse(localStorage.getItem("myContacts") || "[]");
-      contacts.push({ name, phone });
-      localStorage.setItem("myContacts", JSON.stringify(contacts));
-
+      saveContacts(contacts);
       nameInput.value = "";
       phoneInput.value = "";
-      loadContacts();
-    }
+      renderContacts();
+    };
 
-    // Search Filter
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase();
-      const items = contactsList.querySelectorAll("li");
-      items.forEach(item => {
-        const name = item.textContent.toLowerCase();
-        item.style.display = name.includes(query) ? "block" : "none";
-      });
+    searchBar.addEventListener("input", renderContacts);
+
+    // Auto-import last dialed number if not saved
+    window.addEventListener("load", () => {
+      const lastDialed = localStorage.getItem("lastDialed");
+      if (lastDialed) {
+        const contacts = getContacts();
+        const exists = contacts.find(c => c.phone === lastDialed);
+        if (!exists) {
+          contacts.push({ name: `Unknown ${contacts.length + 1}`, phone: lastDialed });
+          saveContacts(contacts);
+          localStorage.removeItem("lastDialed");
+        }
+      }
+      renderContacts();
     });
-
-    // Load on start
-    loadContacts();
   </script>
 </body>
 </html>
