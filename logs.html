@@ -2,52 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Call Logs - Call Me</title>
+  <link rel="stylesheet" href="css/style.css" />
   <style>
-    body { font-family: sans-serif; padding: 20px; padding-bottom: 80px; }
-    ul { list-style: none; padding: 0; }
-    li { background: #f2f2f2; margin: 5px 0; padding: 10px; border-radius: 5px; }
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      padding-bottom: 80px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    small {
+      color: gray;
+    }
+    .incoming { color: green; margin-right: 5px; }
+    .outgoing { color: blue; margin-right: 5px; }
+    .missed { color: red; margin-right: 5px; }
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+    }
+    .clear-btn {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+
   <h2>📜 Call Logs</h2>
+  <input type="text" id="logSearch" placeholder="🔍 Search logs..." />
+  <button class="clear-btn" onclick="clearLogs()">🗑️ Clear All Logs</button>
+
   <ul id="logList"></ul>
 
+  <a href="index.html" class="back-link">🔙 Back to Dashboard</a>
+
   <script>
-    const logs = JSON.parse(localStorage.getItem('myCallLogs') || "[]").reverse();
-    const list = document.getElementById('logList');
-    logs.forEach(log => {
-      const li = document.createElement('li');
-      li.textContent = `${log.time} | ${log.caller} → ${log.receiver} [${log.status}]`;
-      list.appendChild(li);
+    const logList = document.getElementById("logList");
+    const logSearch = document.getElementById("logSearch");
+
+    function loadLogs() {
+      const logs = JSON.parse(localStorage.getItem("myCallLogs") || "[]");
+      logList.innerHTML = "";
+
+      logs.reverse().forEach(log => {
+        const li = document.createElement("li");
+        let icon = "❌", iconClass = "missed";
+
+        if (log.status === "Incoming Call") {
+          icon = "⬇️"; iconClass = "incoming";
+        } else if (log.status === "Outgoing Call") {
+          icon = "⬆️"; iconClass = "outgoing";
+        }
+
+        li.innerHTML = `<span class="${iconClass}">${icon}</span>
+          <a href="tel:${log.receiver === 'You' ? log.caller : log.receiver}">
+            ${log.receiver === 'You' ? log.caller : log.receiver}
+          </a>
+          <small>(${log.time}) - ${log.status}</small>`;
+        logList.appendChild(li);
+      });
+    }
+
+    function clearLogs() {
+      if (confirm("Are you sure you want to delete all call logs?")) {
+        localStorage.removeItem("myCallLogs");
+        loadLogs();
+      }
+    }
+
+    logSearch.addEventListener("input", () => {
+      const query = logSearch.value.toLowerCase();
+      const items = logList.querySelectorAll("li");
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? "block" : "none";
+      });
     });
+
+    loadLogs();
   </script>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <a href="index.html">🏠 Home</a>
-    <a href="call.html">📞 Call</a>
-    <a href="contacts.html">👥 Contacts</a>
-    <a href="logs.html">📜 Logs</a>
-    <a href="webrtc.html">🎥 Video</a>
-  </nav>
-
-  <style>
-    .navbar {
-      display: flex;
-      justify-content: space-around;
-      background: #222;
-      color: white;
-      padding: 10px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-    }
-  </style>
 </body>
 </html>
