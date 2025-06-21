@@ -1,27 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BharatVerse - Call Me</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+      background: #f4f4f4;
+    }
+    .home h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .home p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .btn {
+      background: #1a237e;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
+
   <main class="home">
     <h1>📱 Welcome to Call Me</h1>
     <p>Smart calling, Bharat powered 🇮🇳</p>
-    <a href="dashboard.html" class="btn">Go to Dashboard</a>
+    <a href="dashboard.html" class="btn">🚀 Go to Dashboard</a>
   </main>
 
   <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('✅ Service Worker registered'))
+        .catch(err => console.error('❌ SW registration failed', err));
     }
   </script>
 
-  <!-- Install App (PWA Prompt) -->
+  <!-- PWA Install Prompt -->
   <script>
     let deferredPrompt;
 
@@ -39,9 +72,9 @@
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then(choiceResult => {
           if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted install');
+            console.log('✅ User installed the app');
           } else {
-            console.log('User dismissed install');
+            console.log('🚫 User dismissed the install prompt');
           }
           deferredPrompt = null;
         });
