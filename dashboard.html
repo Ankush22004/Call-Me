@@ -2,41 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Call Me - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - Call Me</title>
+  <link rel="stylesheet" href="css/style.css" />
   <style>
-    body { font-family: sans-serif; margin: 0; padding-bottom: 50px; }
-    h1 { text-align: center; margin-top: 50px; }
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+    }
+    .card {
+      background-color: #f2f2f2;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card span {
+      font-size: 30px;
+      display: block;
+    }
+    .card h3 {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    .stats {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #666;
+    }
+    .danger {
+      background-color: #ffdddd;
+      color: #a00;
+    }
   </style>
 </head>
 <body>
-  <h1>📱 Welcome to Call Me</h1>
-  <p style="text-align: center;">Use the bottom menu to navigate.</p>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <a href="index.html">🏠 Home</a>
-    <a href="call.html">📞 Call</a>
-    <a href="contacts.html">👥 Contacts</a>
-    <a href="logs.html">📜 Logs</a>
-    <a href="webrtc.html">🎥 Video</a>
-  </nav>
+  <header class="header">
+    <h1>📱 BharatVerse Dashboard</h1>
+    <p>Welcome to your smart call manager</p>
+  </header>
 
-  <style>
-    .navbar {
-      display: flex;
-      justify-content: space-around;
-      background: #222;
-      color: white;
-      padding: 10px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
+  <div class="stats" id="liveStats">
+    Loading stats...
+  </div>
+
+  <main class="dashboard">
+    <div class="card-grid">
+      <a href="call.html" class="card">
+        <span>📞</span>
+        <h3>Make Call</h3>
+      </a>
+      <a href="contacts.html" class="card">
+        <span>👥</span>
+        <h3>Contacts</h3>
+      </a>
+      <a href="logs.html" class="card">
+        <span>📜</span>
+        <h3>Call Logs</h3>
+      </a>
+      <a href="webrtc.html" class="card">
+        <span>🎥</span>
+        <h3>WebRTC Call</h3>
+      </a>
+      <a href="index.html" class="card danger">
+        <span>🚪</span>
+        <h3>Logout</h3>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    function loadStats() {
+      const contacts = JSON.parse(localStorage.getItem("myContacts") || "[]");
+      const logs = JSON.parse(localStorage.getItem("myCallLogs") || "[]");
+      document.getElementById("liveStats").textContent = 
+        `📇 ${contacts.length} Contacts | 📞 ${logs.length} Call Logs`;
     }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-    }
-  </style>
+    loadStats();
+  </script>
 </body>
 </html>
