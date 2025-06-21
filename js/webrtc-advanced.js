@@ -1,77 +1,57 @@
-let localStream = null;
-let currentCall = null;
 
-const localVideo = document.getElementById("localVideo");
-const remoteVideo = document.getElementById("remoteVideo");
-const statusDiv = document.getElementById("status");
-const peerIdInput = document.getElementById("peerIdInput");
+// UI Buttons
+const muteBtn = document.createElement('button');
+const videoBtn = document.createElement('button');
+const speakerBtn = document.createElement('button');
 
-const peer = new Peer();
+let isMuted = false;
+let isVideoOn = true;
+let ringtone = new Audio('media/ringtone.mp3');
+ringtone.loop = true;
 
-peer.on("open", id => {
-  document.getElementById("myId").textContent = id;
-});
+// Append buttons
+const callSection = document.querySelector('.call-section');
+muteBtn.textContent = "🔇 Mute";
+videoBtn.textContent = "🎥 Video Off";
+speakerBtn.textContent = "🔈 Speaker";
+callSection.appendChild(muteBtn);
+callSection.appendChild(videoBtn);
+callSection.appendChild(speakerBtn);
 
-// Call someone
-function makeCall() {
-  const peerId = peerIdInput.value.trim();
-  if (!peerId) return;
+// Mute/Unmute
+muteBtn.onclick = () => {
+  if (!localStream) return;
+  isMuted = !isMuted;
+  localStream.getAudioTracks().forEach(track => track.enabled = !isMuted);
+  muteBtn.textContent = isMuted ? "🔈 Unmute" : "🔇 Mute";
+};
 
-  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    .then(stream => {
-      localStream = stream;
-      localVideo.srcObject = stream;
+// Video toggle
+videoBtn.onclick = () => {
+  if (!localStream) return;
+  isVideoOn = !isVideoOn;
+  localStream.getVideoTracks().forEach(track => track.enabled = isVideoOn);
+  videoBtn.textContent = isVideoOn ? "🎥 Video Off" : "🎥 Video On";
+};
 
-      const call = peer.call(peerId, stream);
-      setupCallEvents(call);
-      statusDiv.textContent = "Calling...";
-    })
-    .catch(err => {
-      console.error("Permission Error:", err);
-      alert("Please allow camera/mic access.");
-    });
-}
-
-// Receive a call
-peer.on("call", call => {
-  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    .then(stream => {
-      localStream = stream;
-      localVideo.srcObject = stream;
-      call.answer(stream);
-      setupCallEvents(call);
-    })
-    .catch(err => {
-      console.error("Permission Error:", err);
-      alert("Camera/Mic access is required.");
-    });
-});
-
-function setupCallEvents(call) {
-  currentCall = call;
-  call.on("stream", remoteStream => {
-    remoteVideo.srcObject = remoteStream;
-    statusDiv.textContent = "Connected ✅";
-  });
-
-  call.on("close", () => {
-    statusDiv.textContent = "Call Ended ❌";
-    remoteVideo.srcObject = null;
-  });
-}
-
-function endCall() {
-  if (currentCall) {
-    currentCall.close();
-    currentCall = null;
-    statusDiv.textContent = "Call Ended ❌";
-    remoteVideo.srcObject = null;
+// Speaker control
+speakerBtn.onclick = () => {
+  if (!HTMLMediaElement.prototype.setSinkId) {
+    alert("🔇 Speaker switching not supported in this browser.");
+    return;
   }
-}
 
-function copyMyId() {
-  const id = document.getElementById("myId").textContent;
-  navigator.clipboard.writeText(id).then(() => {
-    alert("ID copied!");
-  });
+  const deviceId = prompt("🎧 Enter audio output device ID (or use default):", "default");
+  remoteVideo.setSinkId(deviceId)
+    .then(() => alert("✅ Speaker changed!"))
+    .catch(err => console.error("Speaker change error:", err));
+};
+
+// Ringtone controls
+function playRingtone() {
+  ringtone.play().catch(err => console.warn("Ringtone play blocked:", err));
+}
+function stopRingtone() {
+  ringtone.pause();
+  ringtone.currentTime = 0;
 }
