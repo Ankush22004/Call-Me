@@ -1,58 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
   <title>Call - Call Me</title>
-  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { font-family: sans-serif; padding: 20px; padding-bottom: 80px; }
+    input, button { padding: 8px; margin: 5px; }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <h1>📞 Call</h1>
-    <p>Dial a number</p>
-  </header>
-
-  <main class="call-page">
-    <input type="text" id="phoneNumber" placeholder="Enter number" readonly />
-
-    <div class="dial-pad">
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>*</button>
-      <button>0</button>
-      <button>#</button>
-    </div>
-
-    <button class="call-btn">📞 Call</button>
-    <a href="dashboard.html" class="back-link">🔙 Back to Dashboard</a>
-  </main>
+  <h2>📞 Make a Call</h2>
+  <input type="text" id="callerId" placeholder="Your ID">
+  <input type="text" id="receiverId" placeholder="Receiver ID">
+  <button onclick="makeCall()">Call</button>
 
   <script>
-    const phoneInput = document.getElementById('phoneNumber');
-    const dialButtons = document.querySelectorAll('.dial-pad button');
-    const callButton = document.querySelector('.call-btn');
+    function makeCall() {
+      const from = document.getElementById('callerId').value;
+      const to = document.getElementById('receiverId').value;
+      const now = new Date().toLocaleString();
 
-    dialButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        phoneInput.value += button.textContent;
-      });
-    });
+      const logs = JSON.parse(localStorage.getItem('myCallLogs') || "[]");
+      logs.push({ caller: from, receiver: to, time: now, status: "Outgoing" });
+      localStorage.setItem('myCallLogs', JSON.stringify(logs));
 
-    callButton.addEventListener('click', () => {
-      const number = phoneInput.value;
-      if (number) {
-        window.location.href = `tel:${number}`; // This opens phone dialer on mobile
-      } else {
-        alert("Please enter a number.");
-      }
-    });
+      alert(`Calling from ${from} to ${to}`);
+    }
   </script>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="call.html">📞 Call</a>
+    <a href="contacts.html">👥 Contacts</a>
+    <a href="logs.html">📜 Logs</a>
+    <a href="webrtc.html">🎥 Video</a>
+  </nav>
+
+  <style>
+    .navbar {
+      display: flex;
+      justify-content: space-around;
+      background: #222;
+      color: white;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
 </body>
 </html>
