@@ -2,36 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard - Call Me</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>Call Me - Dashboard</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding-bottom: 50px; }
+    h1 { text-align: center; margin-top: 50px; }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <h1>📱 BharatVerse Dashboard</h1>
-    <p>Welcome to your smart call manager</p>
-  </header>
+  <h1>📱 Welcome to Call Me</h1>
+  <p style="text-align: center;">Use the bottom menu to navigate.</p>
 
-  <main class="dashboard">
-    <div class="card-grid">
-      <a href="call.html" class="card">
-        <span>📞</span>
-        <h3>Make Call</h3>
-      </a>
-      <a href="contacts.html" class="card">
-        <span>👥</span>
-        <h3>Contacts</h3>
-      </a>
-      <a href="logs.html" class="card">
-        <span>📜</span>
-        <h3>Call Logs</h3>
-      </a>
-      <a href="webrtc.html" class="btn">🎥 WebRTC Call</a>
-      <a href="index.html" class="card danger">
-        <span>🚪</span>
-        <h3>Logout</h3>
-      </a>
-    </div>
-  </main>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="call.html">📞 Call</a>
+    <a href="contacts.html">👥 Contacts</a>
+    <a href="logs.html">📜 Logs</a>
+    <a href="webrtc.html">🎥 Video</a>
+  </nav>
+
+  <style>
+    .navbar {
+      display: flex;
+      justify-content: space-around;
+      background: #222;
+      color: white;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
 </body>
 </html>
